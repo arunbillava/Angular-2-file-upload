@@ -1,6 +1,6 @@
 # File-upload-Angular2-Nodejs
 File upload with angular 2 and node.js
-
+With File size limit, Mime Type and clear input which uses ng2 file upload
 ##Quick Setup
 
 - `git clone https://github.com/arunbillava/Angular-2-file-upload.git`
