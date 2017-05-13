@@ -3,7 +3,7 @@ File upload with angular 2 and node.js
 
 ##Quick Setup
 
-- `git clone https://github.com/rahil471/File-upload-Angular2-Nodejs.git file-upload`
+- `git clone https://github.com/arunbillava/Angular-2-file-upload.git`
 - Navigate into the node app `cd file-upload/node-app`
 - Install Dependencies `npm install`
 - Install gulp globally `npm install gulp -g`

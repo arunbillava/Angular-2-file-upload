@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,ViewChild,ElementRef } from '@angular/core';
 import { FileUploader } from 'ng2-file-upload';
 
 @Component({
@@ -24,7 +24,7 @@ import { FileUploader } from 'ng2-file-upload';
                                 </div>
                                 <div class="form-group">
                                     <label for="single">single</label>
-                                    <input type="file" class="form-control" name="single" ng2FileSelect [uploader]="uploader" />                                  
+                                    <input #uploadEl type="file" class="form-control"   name="single" ng2FileSelect [uploader]="uploader" [disabled]="uploader?.queue?.length != 0"/>                                  
                                 </div>            
                             </form>
                         </div>
@@ -66,7 +66,7 @@ import { FileUploader } from 'ng2-file-upload';
                                             <span class="glyphicon glyphicon-ban-circle"></span> Cancel
                                         </button>
                                         <button type="button" class="btn btn-danger btn-xs"
-                                                (click)="item.remove()">
+                                                (click)="onItemRemove(item)">
                                             <span class="glyphicon glyphicon-trash"></span> Remove
                                         </button>
                                     </td>
@@ -99,5 +99,39 @@ import { FileUploader } from 'ng2-file-upload';
                 </div>`
 })
 export class AppComponent {
-    public uploader:FileUploader = new FileUploader({url:'http://localhost:3001/upload'});
+    @ViewChild('uploadEl') uploadElRef: ElementRef
+    authHeader: Array<Headers> = [];
+    fileValue:any;
+    public uploader: FileUploader = new FileUploader({
+        //give api url
+        url: 'http://localhost:3001/uploads',
+        //add header here
+        headers: [{ name: 'email', value: 'billavaa@gmail.com' }],
+        // mime type
+        allowedMimeType: ['application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'application/msword',
+            'application/vnd.ms-excel'
+
+        ],
+        //file size limit : 5mb
+        maxFileSize: 5 * 1024 * 1024
+    }
+    );
+    ngOnInit() {
+        //if you want to add additional param before upload
+        this.uploader.onBeforeUploadItem = (item: any) => {
+
+            this.uploader.options.additionalParameter = {
+                name: item.file.name
+            };
+        };
+    }
+
+    onItemRemove(item:any){
+        //remove item and clear input
+        item.remove();
+         this.uploadElRef.nativeElement.value = ''
+        this.uploader.clearQueue();
+    }
 } 
